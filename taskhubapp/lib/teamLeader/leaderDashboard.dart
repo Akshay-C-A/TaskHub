@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskhubapp/chat_app/pages/home_page.dart';
 import 'package:taskhubapp/teamLeader/addTask.dart';
 import 'package:taskhubapp/teamLeader/sample.dart';
 import 'package:taskhubapp/teamLeader/task_posted.dart';
@@ -32,7 +33,9 @@ class LleaderDashboardState extends State<LeaderDashboard> {
         backgroundColor: Colors.red,
         label: Text('1'),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatHomePage()));
+          },
           child: Icon(Icons.chat),
         ),
       ),

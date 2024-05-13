@@ -11,7 +11,7 @@ void main() async {
   );
 
   runApp(MaterialApp(
-    home: LoginScreen(),
+    home: LoginPage(),
   ));
 }
 

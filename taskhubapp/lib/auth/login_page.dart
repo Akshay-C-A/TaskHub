@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final nameController = TextEditingController();
   final designationController = TextEditingController();
   final skillsController = TextEditingController();
+  final companyNameController = TextEditingController(); // Added company name controller
   bool _isLoading = false;
   bool _isObscure = true;
   String? _emailError;
@@ -23,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   String? _nameError;
   String? _designationError;
   String? _skillsError;
+  String? _companyNameError; // Added company name error
   String _userType = 'teamMember';
   bool _isRegisterMode = false;
   Map<String, dynamic>? userType;
@@ -66,11 +68,24 @@ class _LoginPageState extends State<LoginPage> {
           });
           return;
         }
+        if (companyNameController.text.trim().isEmpty) { // Check if company name is empty
+          setState(() {
+            _companyNameError = 'Company name is required';
+          });
+          return;
+        }
 
         UserCredential userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Successfully Registered'),
+            duration: Duration(seconds: 3),
+          ),
         );
 
         await FirebaseFirestore.instance
@@ -81,7 +96,8 @@ class _LoginPageState extends State<LoginPage> {
           'userType': _userType,
           'name': nameController.text.trim(),
           'designation': designationController.text.trim(),
-          'skills': skillsController.text.trim(),
+          'skills': skillsController.text.trim().split(',').map((skill) => skill.trim()).toList(),
+          'companyName': companyNameController.text.trim(), // Add company name to Firestore
         });
 
         if (_userType == 'teamLeader') {
@@ -91,8 +107,9 @@ class _LoginPageState extends State<LoginPage> {
               .set({
             'email': emailController.text.trim(),
             'name': nameController.text.trim(),
-          'designation': designationController.text.trim(),
-          'skills': skillsController.text.trim(),
+            'designation': designationController.text.trim(),
+            'skills': skillsController.text.trim(),
+            'companyName': companyNameController.text.trim(), // Add company name to Firestore
           });
         } else {
           await FirebaseFirestore.instance
@@ -101,8 +118,9 @@ class _LoginPageState extends State<LoginPage> {
               .set({
             'email': emailController.text.trim(),
             'name': nameController.text.trim(),
-          'designation': designationController.text.trim(),
-          'skills': skillsController.text.trim(),
+            'designation': designationController.text.trim(),
+            'skills': skillsController.text.trim(),
+            'companyName': companyNameController.text.trim(), // Add company name to Firestore
           });
 
           userType = {
@@ -175,6 +193,7 @@ class _LoginPageState extends State<LoginPage> {
     nameController.dispose();
     designationController.dispose();
     skillsController.dispose();
+    companyNameController.dispose(); // Dispose the company name controller
     super.dispose();
   }
 
@@ -278,6 +297,15 @@ class _LoginPageState extends State<LoginPage> {
                             errorStyle: TextStyle(color: Colors.red),
                           ),
                         ),
+                        SizedBox(height: 20.0),
+                        TextField(
+                          controller: companyNameController,
+                          decoration: InputDecoration(
+                            labelText: 'Company Name',
+                            errorText: _companyNameError,
+                            errorStyle: TextStyle(color: Colors.red),
+                          ),
+                        ),
                       ],
                     ),
                   SizedBox(height: 20.0),
@@ -297,11 +325,13 @@ class _LoginPageState extends State<LoginPage> {
                         _nameError = null;
                         _designationError = null;
                         _skillsError = null;
+                        _companyNameError = null;
                         emailController.clear();
                         passwordController.clear();
                         nameController.clear();
                         designationController.clear();
                         skillsController.clear();
+                        companyNameController.clear();
                       });
                     },
                     child: Text(

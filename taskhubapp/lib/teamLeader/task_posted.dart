@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taskhubapp/auth/login_page.dart';
 import 'package:taskhubapp/services/leaderFirestore.dart';
 import 'package:taskhubapp/services/notification_services.dart';
 import 'package:taskhubapp/teamLeader/view_task.dart';
@@ -23,7 +25,23 @@ class _TaskPostedState extends State<TaskPosted> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tasks'),
-        actions: const [
+        actions: [
+          TextButton(
+          onPressed: () async {
+            try {
+              await FirebaseAuth.instance.signOut();
+              // Navigate to the MainPage
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (route) => false,
+              );
+            } catch (e) {
+              print('Error signing out: $e');
+            }
+          },
+          child: Text('LogOut'),
+        ),
           Padding(
             padding: EdgeInsets.only(right: 12),
             child: CircleAvatar(
@@ -81,7 +99,7 @@ class _TaskPostedState extends State<TaskPosted> {
                       Navigator.push(context, MaterialPageRoute(builder: ((context) => ViewTask(priority: priority, taskName: taskName, timestamp: timestamp, projectName: projectName, taskId: taskId, details: details, leaderName: leaderName, leaderId: leaderId))));
                     },
                     tileColor: Colors.amber,
-                    leading: Text(index.toString()),
+                    leading: Text((index+1).toString()),
                     title: Text(taskName),
                     subtitle: Text(details),
                     trailing: CircleAvatar(

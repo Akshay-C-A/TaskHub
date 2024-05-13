@@ -24,7 +24,7 @@ class LleaderDashboardState extends State<LeaderDashboard> {
         leaderId: FirebaseAuth.instance.currentUser!.email.toString(),
         leaderName: 'Sundar Piche',
       ),
-      const Sample()
+      
     ];
 
     return Scaffold(

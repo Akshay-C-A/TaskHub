@@ -1,8 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-
-
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,37 +14,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _isObscure = true;
   String? _emailError;
   String? _passwordError;
-
-  void _navigateToPage(BuildContext context) {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    final userMail = user.email;
-
-    // if (userType == 'Student') {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => Student_Dashboard()),
-    //   );
-    // } else if (userType == 'Alumni') {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => Alumni_Dashboard()),
-    //   );
-    // } else if (userType == 'Admin') {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => AdminDashboard()),
-    //   );
-    // } else if (userType == 'Moderator') {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => EventDashboard()),
-    //   );
-    // } else {
-    //   // Handle other user types or invalid emails
-    // }
-  }
-}
+  String _userType = 'teamMember';
+  bool _isRegisterMode = false;
 
   Future<void> signIn() async {
     setState(() {
@@ -70,10 +39,35 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+       if (_isRegisterMode) {
+        // Register new user
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+
+        // Store user data in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+          'email': emailController.text.trim(),
+          'userType': _userType,
+        });
+
+        if (_userType == 'teamLeader') {
+          await FirebaseFirestore.instance.collection('teamLeaders').doc(userCredential.user!.uid).set({
+            'email': emailController.text.trim(),
+          });
+        } else {
+          await FirebaseFirestore.instance.collection('teamMembers').doc(userCredential.user!.uid).set({
+            'email': emailController.text.trim(),
+          });
+        }
+      } else {
+        // Sign in existing user
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+      }
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'invalid-email') {
@@ -83,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error signing in: ${e.message}'),
+              content: Text('Error: ${e.message}'),
             ),
           );
         }
@@ -93,10 +87,6 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = false;
       });
     }
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => MainPage()),
-    // );
   }
 
   @override
@@ -119,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  'LOGIN',
+                  _isRegisterMode ? 'REGISTER' : 'LOGIN',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 45.0,
@@ -127,6 +117,26 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 10.0),
+                if (_isRegisterMode)
+                  DropdownButtonFormField<String>(
+                    value: _userType,
+                    onChanged: (value) {
+                      setState(() {
+                        _userType = value!;
+                      });
+                    },
+                    items: [
+                      DropdownMenuItem(
+                        value: 'teamMember',
+                        child: Text('Team Member'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'teamLeader',
+                        child: Text('Team Leader'),
+                      ),
+                    ],
+                  ),
+                SizedBox(height: 20.0),
                 TextField(
                   controller: emailController,
                   decoration: InputDecoration(
@@ -161,8 +171,24 @@ class _LoginPageState extends State<LoginPage> {
                 else
                   ElevatedButton(
                     onPressed: signIn,
-                    child: Text('Login'),
+                    child: Text(_isRegisterMode ? 'Register' : 'Login'),
                   ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isRegisterMode = !_isRegisterMode;
+                      _emailError = null;
+                      _passwordError = null;
+                      emailController.clear();
+                      passwordController.clear();
+                    });
+                  },
+                  child: Text(
+                    _isRegisterMode
+                        ? 'Already have an account? Login'
+                        : 'Don\'t have an account? Register',
+                  ),
+                ),
               ],
             ),
           ),

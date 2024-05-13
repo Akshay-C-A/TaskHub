@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taskhubapp/auth/login_page.dart';
 import 'package:taskhubapp/services/memberFirestore.dart';
 import 'package:taskhubapp/teamLeader/sample.dart';
+import 'package:taskhubapp/teamMember/member_profile.dart';
 
 class Member {
   String memberId;
@@ -94,8 +97,36 @@ class _MemberDashboardState extends State<MemberDashboard> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(member_name),
-      ),
+                    title: Text('Team Member'),
+                    actions: [
+                      
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileScreen(
+                                    member: Member(
+                                  member_name: member_name,
+                                  memberId: memberId,
+                                  project_name: project_name,
+                                  team_lead_name: team_lead_name,
+                                  skills: skills,
+                                  mail: mail,
+                                  dpURL: dpURL,
+                                )),
+                              ));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(dpURL),
+                            radius: 20.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
       body: IndexedStack(
         index: _selectedIndex,
         children: widgetOptions,

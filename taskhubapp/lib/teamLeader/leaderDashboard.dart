@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskhubapp/teamLeader/addTask.dart';
 import 'package:taskhubapp/teamLeader/sample.dart';
 
 class LeaderDashboard extends StatefulWidget {
@@ -13,7 +14,16 @@ class LleaderDashboardState extends State<LeaderDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetOptions = <Widget>[Sample(), Sample(), Sample()];
+    List<Widget> widgetOptions = <Widget>[
+      const Sample(),
+      const Sample(),
+      const AddTaskPage(
+        projectName: '123B65',
+        leaderId: 'leader@company.com',
+        leaderName: 'Sundar Piche',
+      ),
+      const Sample()
+    ];
 
     return Scaffold(
       body: IndexedStack(
@@ -31,19 +41,19 @@ class LleaderDashboardState extends State<LeaderDashboard> {
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.people),
             label: 'Students',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: 'Post',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             label: 'Notification',
           ),

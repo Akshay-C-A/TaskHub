@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:taskhubapp/auth/login_page.dart';
 // import 'package:taskhubapp/auth/login_page.dart';
-import 'package:taskhubapp/teamMember/memberDashboard.dart';
+import 'package:taskhubapp/TeamMember/memberDashboard.dart';
 import 'firebase_options.dart';
 
 void main() async {

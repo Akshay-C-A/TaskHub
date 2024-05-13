@@ -47,17 +47,17 @@ class _LoginPageState extends State<LoginPage> {
         );
 
         // Store user data in Firestore
-        await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        await FirebaseFirestore.instance.collection('users').doc(emailController.text).set({
           'email': emailController.text.trim(),
           'userType': _userType,
         });
 
         if (_userType == 'teamLeader') {
-          await FirebaseFirestore.instance.collection('teamLeaders').doc(userCredential.user!.uid).set({
+          await FirebaseFirestore.instance.collection('teamLeaders').doc(emailController.text).set({
             'email': emailController.text.trim(),
           });
         } else {
-          await FirebaseFirestore.instance.collection('teamMembers').doc(userCredential.user!.uid).set({
+          await FirebaseFirestore.instance.collection('teamMembers').doc(emailController.text).set({
             'email': emailController.text.trim(),
           });
         }

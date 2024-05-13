@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskhubapp/chat_app/pages/chat_page.dart';
+import 'package:taskhubapp/chat_app/services/auth/auth_service.dart';
 
 class ChatHomePage extends StatefulWidget {
   const ChatHomePage({super.key});
@@ -19,7 +20,7 @@ class _ChatHomePageState extends State<ChatHomePage> {
   //sign user out
   void signOut() {
     //get auth service
-    final authService = FirebaseAuth.instance;
+    final authService = Provider.of<AuthService>(context, listen: false);
     authService.signOut();
   }
   @override
@@ -28,13 +29,7 @@ class _ChatHomePageState extends State<ChatHomePage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 95, 122, 229),
         title: Text('Home Page'),
-        actions: [
-          //sign out button
-          IconButton(
-            onPressed: signOut, 
-            icon: const Icon(Icons.logout),
-            ),
-        ],
+        
       ),
         body: _buildUserList(),
     );
@@ -77,7 +72,7 @@ class _ChatHomePageState extends State<ChatHomePage> {
             MaterialPageRoute(
             builder: (context) => ChatPage(
               receiverUserEmail: data['email'],
-              receiverUserID: document.id,
+              receiverUserID: data['uid'],
             ),
           ),
           );

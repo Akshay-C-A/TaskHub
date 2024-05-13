@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import  'package:flutter/material.dart';
 import 'package:taskhubapp/chat_app/components/chat_bubble.dart';
 import 'package:taskhubapp/chat_app/components/my_text_field.dart';
-import 'package:taskhubapp/services/chat/chat_service.dart';
+import 'package:taskhubapp/chat_app/services/auth/chat/chat_service.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverUserEmail;

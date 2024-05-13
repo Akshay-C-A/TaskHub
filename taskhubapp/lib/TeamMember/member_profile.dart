@@ -16,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool isAvailable = true; 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -26,6 +27,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           title: Text(widget.member.member_name),
           actions: [
+            IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MemberProfileForm(),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
             TextButton(
               onPressed: () async {
                 try {
@@ -46,62 +58,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: height * .13),
+              SizedBox(height: height * .10),
               Padding(
-                padding: EdgeInsets.fromLTRB(width * .08, 0, width * .08, 0),
+  padding: EdgeInsets.fromLTRB(width * .08, 0, width * .08, 0),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Container(
+        width: 110,
+        height: 110,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(35),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: Image.network(
+              widget.member.dpURL,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+      SizedBox(height: 12), // Adjust spacing as needed
+      Text(
+        widget.member.member_name,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 24, // Decreased font size
+        ),
+      ),
+      SizedBox(height: 8), // Adjust spacing as needed
+      Text(
+        widget.member.project_name, // Display team lead name separately
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: Colors.grey, // You can adjust color as needed
+        ),
+      ),
+      SizedBox(height: 16), // Adjust spacin
+                             // Switch button
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 110,
-                      height: 110,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(35),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(28),
-                          child: Image.network(widget.member.dpURL,
-                              fit: BoxFit.cover),
-                        ),
+                    Text(
+                      'Unavailable',
+                      style: TextStyle(
+                        color: isAvailable ? Colors.grey : Colors.black,
                       ),
                     ),
-                    SizedBox(width: width * .05),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            children: [
-                              Text(
-                                widget.member.member_name,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 4),
-                          Text(widget.member.team_lead_name),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MemberProfileForm(),
-                          ),
-                        );
+                    Switch(
+                      value: isAvailable,
+                      onChanged: (value) {
+                        setState(() {
+                          isAvailable = value;
+                        });
                       },
-                      icon: Icon(Icons.edit),
                     ),
+                    Text(
+                      'Available',
+                      style: TextStyle(
+                        color: isAvailable ? Colors.black : Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
                   ],
                 ),
               ),
@@ -132,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Project Name',
+                          'Team Lead Name',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -140,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 5),
                         Text(
-                          widget.member.project_name,
+                          widget.member.team_lead_name,
                           style: TextStyle(fontSize: 16),
                         ),
                       ],
@@ -155,12 +183,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.member.team_lead_name,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
                     SizedBox(height: width * 0.08),
                     Column(
                       children: [

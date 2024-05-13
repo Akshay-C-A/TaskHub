@@ -92,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
             .collection('users')
             .doc(emailController.text)
             .set({
+              'uid': await FirebaseAuth.instance.currentUser!.uid,
           'email': emailController.text.trim(),
           'userType': _userType,
           'name': nameController.text.trim(),

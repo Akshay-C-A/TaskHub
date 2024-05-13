@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+class Member2 {
+  String memberId;
+  String member_name;
+  String project_name;
+  String team_lead_name;
+  List<dynamic> skills;
+  String mail;
+  String dpURL;
+
+  Member2({
+    required this.memberId,
+    required this.member_name,
+    required this.project_name,
+    required this.team_lead_name,
+    required this.skills,
+    required this.mail,
+    required this.dpURL,
+  });
+}
+
+
 class MemberProfileForm extends StatefulWidget {
   @override
   State<MemberProfileForm> createState() => _MemberProfileFormState();

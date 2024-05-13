@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskhubapp/teamMember/member_profile_form.dart';
 import 'package:taskhubapp/teamLeader/leaderDashboard.dart';
 import 'package:taskhubapp/teamMember/memberDashboard.dart';
@@ -13,10 +13,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+  final designationController = TextEditingController();
+  final skillsController = TextEditingController();
   bool _isLoading = false;
   bool _isObscure = true;
   String? _emailError;
   String? _passwordError;
+  String? _nameError;
+  String? _designationError;
+  String? _skillsError;
   String _userType = 'teamMember';
   bool _isRegisterMode = false;
   Map<String, dynamic>? userType;
@@ -29,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      // Validate email and password
       if (emailController.text.trim().isEmpty) {
         setState(() {
           _emailError = 'Email is required';
@@ -42,22 +47,41 @@ class _LoginPageState extends State<LoginPage> {
         });
         return;
       }
-
       if (_isRegisterMode) {
-        // Register new user
+        if (nameController.text.trim().isEmpty) {
+          setState(() {
+            _nameError = 'Name is required';
+          });
+          return;
+        }
+        if (designationController.text.trim().isEmpty) {
+          setState(() {
+            _designationError = 'Designation is required';
+          });
+          return;
+        }
+        if (skillsController.text.trim().isEmpty) {
+          setState(() {
+            _skillsError = 'Skills are required';
+          });
+          return;
+        }
+
         UserCredential userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
 
-        // Store user data in Firestore
         await FirebaseFirestore.instance
             .collection('users')
             .doc(emailController.text)
             .set({
           'email': emailController.text.trim(),
           'userType': _userType,
+          'name': nameController.text.trim(),
+          'designation': designationController.text.trim(),
+          'skills': skillsController.text.trim(),
         });
 
         if (_userType == 'teamLeader') {
@@ -66,6 +90,9 @@ class _LoginPageState extends State<LoginPage> {
               .doc(emailController.text)
               .set({
             'email': emailController.text.trim(),
+            'name': nameController.text.trim(),
+          'designation': designationController.text.trim(),
+          'skills': skillsController.text.trim(),
           });
         } else {
           await FirebaseFirestore.instance
@@ -73,13 +100,14 @@ class _LoginPageState extends State<LoginPage> {
               .doc(emailController.text)
               .set({
             'email': emailController.text.trim(),
+            'name': nameController.text.trim(),
+          'designation': designationController.text.trim(),
+          'skills': skillsController.text.trim(),
           });
 
-          UserCredential userCredential =
-              await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: emailController.text.trim(),
-            password: passwordController.text.trim(),
-          );
+          userType = {
+            'userType': 'teamMember',
+          };
 
           if (userType!['userType'] == 'teamLeader') {
             Navigator.pushReplacement(
@@ -89,19 +117,17 @@ class _LoginPageState extends State<LoginPage> {
           } else {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => MemberProfileForm()),
+              MaterialPageRoute(builder: (context) => MemberDashboard()),
             );
           }
         }
       } else {
-        // Sign in existing user
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
 
-        // Get user type from Firestore
         DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
             .collection('users')
             .doc(emailController.text)
@@ -109,7 +135,6 @@ class _LoginPageState extends State<LoginPage> {
 
         userType = userSnapshot.data() as Map<String, dynamic>;
 
-        // Navigate to the corresponding dashboard
         if (userType!['userType'] == 'teamLeader') {
           Navigator.pushReplacement(
             context,
@@ -147,6 +172,9 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    nameController.dispose();
+    designationController.dispose();
+    skillsController.dispose();
     super.dispose();
   }
 
@@ -154,96 +182,136 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+        child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text(
-                  _isRegisterMode ? 'REGISTER' : 'LOGIN',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 45.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                if (_isRegisterMode)
-                  DropdownButtonFormField<String>(
-                    value: _userType,
-                    onChanged: (value) {
-                      setState(() {
-                        _userType = value!;
-                      });
-                    },
-                    items: [
-                      DropdownMenuItem(
-                        value: 'teamMember',
-                        child: Text('Team Member'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'teamLeader',
-                        child: Text('Team Leader'),
-                      ),
-                    ],
-                  ),
-                SizedBox(height: 20.0),
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email id',
-                    errorText: _emailError,
-                    errorStyle: TextStyle(color: Colors.red),
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    errorText: _passwordError,
-                    errorStyle: TextStyle(color: Colors.red),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscure ? Icons.visibility : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscure = !_isObscure;
-                        });
-                      },
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    _isRegisterMode ? 'REGISTER' : 'LOGIN',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 45.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  obscureText: _isObscure,
-                ),
-                SizedBox(height: 20.0),
-                if (_isLoading)
-                  CircularProgressIndicator()
-                else
-                  ElevatedButton(
-                    onPressed: signIn,
-                    child: Text(_isRegisterMode ? 'Register' : 'Login'),
+                  SizedBox(height: 10.0),
+                  if (_isRegisterMode)
+                    DropdownButtonFormField<String>(
+                      value: _userType,
+                      onChanged: (value) {
+                        setState(() {
+                          _userType = value!;
+                        });
+                      },
+                      items: [
+                        DropdownMenuItem(
+                          value: 'teamMember',
+                          child: Text('Team Member'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'teamLeader',
+                          child: Text('Team Leader'),
+                        ),
+                      ],
+                    ),
+                  SizedBox(height: 20.0),
+                  TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email id',
+                      errorText: _emailError,
+                      errorStyle: TextStyle(color: Colors.red),
+                    ),
                   ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _isRegisterMode = !_isRegisterMode;
-                      _emailError = null;
-                      _passwordError = null;
-                      emailController.clear();
-                      passwordController.clear();
-                    });
-                  },
-                  child: Text(
-                    _isRegisterMode
-                        ? 'Already have an account? Login'
-                        : 'Don\'t have an account? Register',
+                  SizedBox(height: 20.0),
+                  TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      errorText: _passwordError,
+                      errorStyle: TextStyle(color: Colors.red),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        },
+                      ),
+                    ),
+                    obscureText: _isObscure,
                   ),
-                ),
-              ],
+                  if (_isRegisterMode)
+                    Column(
+                      children: [
+                        SizedBox(height: 20.0),
+                        TextField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            labelText: 'Name',
+                            errorText: _nameError,
+                            errorStyle: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextField(
+                          controller: designationController,
+                          decoration: InputDecoration(
+                            labelText: 'Designation',
+                            errorText: _designationError,
+                            errorStyle: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextField(
+                          controller: skillsController,
+                          decoration: InputDecoration(
+                            labelText: 'Skills',
+                            errorText: _skillsError,
+                            errorStyle: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  SizedBox(height: 20.0),
+                  if (_isLoading)
+                    CircularProgressIndicator()
+                  else
+                    ElevatedButton(
+                      onPressed: signIn,
+                      child: Text(_isRegisterMode ? 'Register' : 'Login'),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _isRegisterMode = !_isRegisterMode;
+                        _emailError = null;
+                        _passwordError = null;
+                        _nameError = null;
+                        _designationError = null;
+                        _skillsError = null;
+                        emailController.clear();
+                        passwordController.clear();
+                        nameController.clear();
+                        designationController.clear();
+                        skillsController.clear();
+                      });
+                    },
+                    child: Text(
+                      _isRegisterMode
+                          ? 'Already have an account? Login'
+                          : 'Don\'t have an account? Register',
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

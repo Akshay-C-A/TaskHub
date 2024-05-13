@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:taskhubapp/teamLeader/leaderDashboard.dart';
+import 'package:taskhubapp/teamMember/memberDashboard.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   String? _passwordError;
   String _userType = 'teamMember';
   bool _isRegisterMode = false;
+  Map<String, dynamic>? userType;
 
   Future<void> signIn() async {
     setState(() {
@@ -39,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
-       if (_isRegisterMode) {
+      if (_isRegisterMode) {
         // Register new user
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
@@ -63,10 +66,28 @@ class _LoginPageState extends State<LoginPage> {
         }
       } else {
         // Sign in existing user
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
+
+        // Get user type from Firestore
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').doc(emailController.text).get();
+
+        userType = userSnapshot.data() as Map<String, dynamic>;
+
+        // Navigate to the corresponding dashboard
+        if (userType!['userType'] == 'teamLeader') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LeaderDashboard()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MemberDashboard()),
+          );
+        }
       }
     } on FirebaseAuthException catch (e) {
       setState(() {

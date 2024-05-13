@@ -92,6 +92,15 @@ class _MemberDashboardState extends State<MemberDashboard> {
           child: Icon(Icons.chat),
         ),
       ),
+      floatingActionButton: Badge(
+        isLabelVisible: true,
+        backgroundColor: Colors.red,
+        label: Text('1'),
+        child: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(Icons.chat),
+        ),
+      ),
       appBar: AppBar(
                     title: Text('Team Member'),
                     actions: [

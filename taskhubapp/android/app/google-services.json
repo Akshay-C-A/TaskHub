@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770490909",
+    "project_id": "taskhub-abc23",
+    "storage_bucket": "taskhub-abc23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770490909:android:6cfae143883196c328bcf4",
+        "android_client_info": {
+          "package_name": "com.example.taskhubapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgo9UIj3vCZ-fDXXNaoHis7Up7svVsjJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

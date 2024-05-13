@@ -5,7 +5,6 @@ import 'package:taskhubapp/services/memberFirestore.dart';
 import 'package:taskhubapp/teamLeader/sample.dart';
 import 'package:taskhubapp/teamMember/member_profile.dart';
 
-
 class Member {
   String memberId;
   String member_name;
@@ -98,36 +97,35 @@ class _MemberDashboardState extends State<MemberDashboard> {
 
     return Scaffold(
       appBar: AppBar(
-                    title: Text('Team Member'),
-                    actions: [
-                      
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileScreen(
-                                    member: Member(
-                                  member_name: member_name,
-                                  memberId: memberId,
-                                  project_name: project_name,
-                                  team_lead_name: team_lead_name,
-                                  skills: skills,
-                                  mail: mail,
-                                  dpURL: dpURL,
-                                )),
-                              ));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(dpURL),
-                            radius: 20.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+        title: Text('Team Member'),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                        member: Member(
+                      member_name: member_name,
+                      memberId: memberId,
+                      project_name: project_name,
+                      team_lead_name: team_lead_name,
+                      skills: skills,
+                      mail: mail,
+                      dpURL: dpURL,
+                    )),
+                  ));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(dpURL),
+                radius: 20.0,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: IndexedStack(
         index: _selectedIndex,
         children: widgetOptions,

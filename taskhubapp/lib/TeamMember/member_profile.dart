@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                           SizedBox(height: 4),
-                          Text(widget.member.team_name),
+                          Text(widget.member.team_lead_name),
                         ],
                       ),
                     ),
@@ -152,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.member.team_name,
+                      widget.member.team_lead_name,
                       style: TextStyle(
                         fontSize: 16,
                       ),

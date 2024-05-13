@@ -10,7 +10,7 @@ void main() async {
   );
 
   runApp(MaterialApp(
-    home: MyApp(),
+    home: Login_Page(),
   ));
 }
 

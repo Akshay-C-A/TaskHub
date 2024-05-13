@@ -10,16 +10,7 @@ void main() async {
   );
 
   runApp(MaterialApp(
-    home: Login_Page(),
+    home: LoginPage(),
   ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}

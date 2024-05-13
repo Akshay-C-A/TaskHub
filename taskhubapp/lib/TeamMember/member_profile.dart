@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:taskhubapp/TeamMember/member_profile_form.dart';
-import 'package:taskhubapp/auth/login_page.dart';
 import 'package:taskhubapp/teamMember/memberDashboard.dart';
+import 'package:taskhubapp/teamMember/member_profile_form.dart';
+import 'package:taskhubapp/auth/login_page.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Member member;
@@ -149,7 +149,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(height: 16),
               Padding(
-                padding: EdgeInsets.fromLTRB(width * .08, width * 0.03, width * .08, 0),
+                padding: EdgeInsets.fromLTRB(
+                    width * .08, width * 0.03, width * .08, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:taskhubapp/TeamMember/member_profile_form.dart';
+import 'package:taskhubapp/teamMember/member_profile_form.dart';
 import 'package:taskhubapp/teamLeader/leaderDashboard.dart';
 import 'package:taskhubapp/teamMember/memberDashboard.dart';
 

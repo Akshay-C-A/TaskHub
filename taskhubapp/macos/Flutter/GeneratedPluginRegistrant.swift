@@ -9,6 +9,7 @@ import cloud_firestore
 import file_selector_macos
 import firebase_auth
 import firebase_core
+import flutter_local_notifications
 import firebase_storage
 import shared_preferences_foundation
 

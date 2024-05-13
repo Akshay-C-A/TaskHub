@@ -16,16 +16,17 @@ class LleaderDashboardState extends State<LeaderDashboard> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      const TaskPosted(),
+      const TaskPosted(leaderId: 'leader@company.com',),
       const AddTaskPage(
         projectName: '123B65',
-        leaderId: 'leader@company.com',
+        leaderId: '',
         leaderName: 'Sundar Piche',
       ),
       const Sample()
     ];
 
     return Scaffold(
+      
       floatingActionButton: Badge(
         isLabelVisible: true,
         backgroundColor: Colors.red,

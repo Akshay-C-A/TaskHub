@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:taskhubapp/teamMember/memberDashboard.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -10,7 +11,7 @@ void main() async {
   );
 
   runApp(MaterialApp(
-    home: ,
+    home: MemberDashboard(),
   ));
 }
 

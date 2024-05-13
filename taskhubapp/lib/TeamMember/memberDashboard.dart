@@ -5,6 +5,7 @@ import 'package:taskhubapp/TeamMember/member_profile.dart';
 import 'package:taskhubapp/TeamMember/member_profile_form.dart';
 // import 'package:taskhubapp/TeamMember/member_profile_form.dart';
 import 'package:taskhubapp/auth/login_page.dart';
+import 'package:taskhubapp/chat_app/pages/home_page.dart';
 import 'package:taskhubapp/services/memberFirestore.dart';
 import 'package:taskhubapp/teamLeader/sample.dart';
 // import 'package:taskhubapp/teamMember/member_profile.dart';
@@ -85,7 +86,9 @@ class _MemberDashboardState extends State<MemberDashboard> {
         backgroundColor: Colors.red,
         label: Text('1'),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatHomePage()));
+          },
           child: Icon(Icons.chat),
         ),
       ),

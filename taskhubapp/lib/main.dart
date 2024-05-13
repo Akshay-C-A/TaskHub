@@ -15,8 +15,6 @@ void main() async {
   await Permission.photos.request();
   await Permission.storage.request();
 
-  
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

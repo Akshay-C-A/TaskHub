@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:taskhubapp/teamMember/memberDashboard.dart';
-import 'package:taskhubapp/teamMember/member_profile_form.dart';
+import 'package:taskhubapp/TeamMember/member_profile_form.dart';
+// import 'package:taskhubapp/teamMember/memberDashboard.dart';
+// import 'package:taskhubapp/teamMember/member_profile_form.dart';
 import 'package:taskhubapp/auth/login_page.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Member member;
+  final Member2 member;
 
   ProfileScreen({required this.member});
 

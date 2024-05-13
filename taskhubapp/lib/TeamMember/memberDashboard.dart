@@ -1,29 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taskhubapp/TeamMember/member_profile.dart';
+// import 'package:taskhubapp/TeamMember/member_profile.dart';
+import 'package:taskhubapp/TeamMember/member_profile_form.dart';
+// import 'package:taskhubapp/TeamMember/member_profile_form.dart';
 import 'package:taskhubapp/auth/login_page.dart';
 import 'package:taskhubapp/services/memberFirestore.dart';
 import 'package:taskhubapp/teamLeader/sample.dart';
-import 'package:taskhubapp/teamMember/member_profile.dart';
-
-class Member {
-  String memberId;
-  String member_name;
-  String project_name;
-  String team_lead_name;
-  List<dynamic> skills;
-  String mail;
-  String dpURL;
-
-  Member({
-    required this.memberId,
-    required this.member_name,
-    required this.project_name,
-    required this.team_lead_name,
-    required this.skills,
-    required this.mail,
-    required this.dpURL,
-  });
-}
+// import 'package:taskhubapp/teamMember/member_profile.dart';
 
 class MemberDashboard extends StatefulWidget {
   const MemberDashboard({Key? key}) : super(key: key);
@@ -97,35 +81,35 @@ class _MemberDashboardState extends State<MemberDashboard> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Team Member'),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              //   Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => ProfileScreen(
-              //             member: Member(
-              //           member_name: member_name,
-              //           memberId: memberId,
-              //           project_name: project_name,
-              //           team_lead_name: team_lead_name,
-              //           skills: skills,
-              //           mail: mail,
-              //           dpURL: dpURL,
-              //         )),
-              //       ));
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(dpURL),
-                radius: 20.0,
-              ),
-            ),
-          ),
-        ],
-      ),
+                    title: Text('Team Member'),
+                    actions: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileScreen(
+                                    member: Member2(
+                                  member_name: member_name,
+                                  memberId: memberId,
+                                  project_name: project_name,
+                                  team_lead_name: team_lead_name,
+                                  skills: skills,
+                                  mail: mail,
+                                  dpURL: dpURL,
+                                )),
+                              ));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(dpURL),
+                            radius: 20.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
       body: IndexedStack(
         index: _selectedIndex,
         children: widgetOptions,

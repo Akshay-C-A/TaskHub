@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:taskhubapp/TeamMember/member_profile_form.dart';
 import 'package:taskhubapp/teamLeader/leaderDashboard.dart';
 import 'package:taskhubapp/teamMember/memberDashboard.dart';
 
@@ -68,6 +69,20 @@ class _LoginPageState extends State<LoginPage> {
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
+
+        if (userType!['userType'] == 'teamLeader') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LeaderDashboard()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MemberProfileForm()),
+          );
+        }
+
+        
         
         }
       } else {

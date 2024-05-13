@@ -80,6 +80,15 @@ class _MemberDashboardState extends State<MemberDashboard> {
     ];
 
     return Scaffold(
+      floatingActionButton: Badge(
+        isLabelVisible: true,
+        backgroundColor: Colors.red,
+        label: Text('1'),
+        child: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(Icons.chat),
+        ),
+      ),
       appBar: AppBar(
                     title: Text('Team Member'),
                     actions: [

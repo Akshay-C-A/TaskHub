@@ -63,6 +63,12 @@ class _LoginPageState extends State<LoginPage> {
           await FirebaseFirestore.instance.collection('teamMembers').doc(emailController.text).set({
             'email': emailController.text.trim(),
           });
+
+          UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+        
         }
       } else {
         // Sign in existing user

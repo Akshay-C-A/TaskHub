@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskhubapp/chat_app/pages/home_page.dart';
 import 'package:taskhubapp/teamLeader/addTask.dart';
@@ -17,10 +18,10 @@ class LleaderDashboardState extends State<LeaderDashboard> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      const TaskPosted(leaderId: 'leader@company.com',),
-      const AddTaskPage(
+      TaskPosted(leaderId: FirebaseAuth.instance.currentUser!.email.toString(),),
+      AddTaskPage(
         projectName: '123B65',
-        leaderId: '',
+        leaderId: FirebaseAuth.instance.currentUser!.email.toString(),
         leaderName: 'Sundar Piche',
       ),
       const Sample()

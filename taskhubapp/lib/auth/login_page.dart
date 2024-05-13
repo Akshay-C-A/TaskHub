@@ -45,55 +45,67 @@ class _LoginPageState extends State<LoginPage> {
 
       if (_isRegisterMode) {
         // Register new user
-        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
 
         // Store user data in Firestore
-        await FirebaseFirestore.instance.collection('users').doc(emailController.text).set({
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(emailController.text)
+            .set({
           'email': emailController.text.trim(),
           'userType': _userType,
         });
 
         if (_userType == 'teamLeader') {
-          await FirebaseFirestore.instance.collection('teamLeaders').doc(emailController.text).set({
+          await FirebaseFirestore.instance
+              .collection('teamLeaders')
+              .doc(emailController.text)
+              .set({
             'email': emailController.text.trim(),
           });
         } else {
-          await FirebaseFirestore.instance.collection('teamMembers').doc(emailController.text).set({
+          await FirebaseFirestore.instance
+              .collection('teamMembers')
+              .doc(emailController.text)
+              .set({
             'email': emailController.text.trim(),
           });
 
-          UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
-
-        if (userType!['userType'] == 'teamLeader') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LeaderDashboard()),
+          UserCredential userCredential =
+              await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
           );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => MemberProfileForm()),
-          );
-        }
 
-        
-        
+          if (userType!['userType'] == 'teamLeader') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LeaderDashboard()),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => MemberProfileForm()),
+            );
+          }
         }
       } else {
         // Sign in existing user
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
 
         // Get user type from Firestore
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').doc(emailController.text).get();
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(emailController.text)
+            .get();
 
         userType = userSnapshot.data() as Map<String, dynamic>;
 

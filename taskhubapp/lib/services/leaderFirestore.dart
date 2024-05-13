@@ -39,4 +39,14 @@ class LeaderFirestore {
     //   'notified': false,
     // });
   }
+
+  // To get the data for moderator posts
+  Stream<QuerySnapshot> getTasksStream({required String leaderId}) {
+    final tasksStream = _leaderTasks
+        .doc('$leaderId')
+        .collection('tasks')
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+    return tasksStream;
+  }
 }

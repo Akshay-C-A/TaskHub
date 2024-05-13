@@ -101,20 +101,20 @@ class _MemberDashboardState extends State<MemberDashboard> {
         actions: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(
-                        member: Member(
-                      member_name: member_name,
-                      memberId: memberId,
-                      project_name: project_name,
-                      team_lead_name: team_lead_name,
-                      skills: skills,
-                      mail: mail,
-                      dpURL: dpURL,
-                    )),
-                  ));
+              //   Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => ProfileScreen(
+              //             member: Member(
+              //           member_name: member_name,
+              //           memberId: memberId,
+              //           project_name: project_name,
+              //           team_lead_name: team_lead_name,
+              //           skills: skills,
+              //           mail: mail,
+              //           dpURL: dpURL,
+              //         )),
+              //       ));
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),

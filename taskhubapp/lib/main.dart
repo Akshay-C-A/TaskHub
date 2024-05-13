@@ -23,6 +23,6 @@ void main() async {
   await NotificationService().initNotification();
 
   runApp(MaterialApp(
-    home: ,
+    home: LoginPage(),
   ));
 }

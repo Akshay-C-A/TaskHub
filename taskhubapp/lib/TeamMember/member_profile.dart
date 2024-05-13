@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:taskhubapp/TeamMember/member_profile_form.dart';
+import 'package:taskhubapp/auth/login_page.dart';
 import 'package:taskhubapp/teamMember/memberDashboard.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -23,21 +25,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           title: Text(widget.member.member_name),
           actions: [
-            // TextButton(
-            //   // onPressed: () async {
-            //   //   try {
-            //   //     await FirebaseAuth.instance.signOut();
-            //   //     Navigator.pushAndRemoveUntil(
-            //   //       context,
-            //   //       MaterialPageRoute(builder: (context) => MainPage()),
-            //   //       (route) => false,
-            //   //     );
-            //   //   } catch (e) {
-            //   //     print('Error signing out: $e');
-            //   //   }
-            //   // },
-            //   // child: Text('LogOut'),
-            // )
+            TextButton(
+              onPressed: () async {
+                try {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    (route) => false,
+                  );
+                } catch (e) {
+                  print('Error signing out: $e');
+                }
+              },
+              child: Text('LogOut'),
+            )
           ],
         ),
         body: SingleChildScrollView(

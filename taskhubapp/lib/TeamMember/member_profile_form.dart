@@ -5,6 +5,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Member2 {
   String memberId;
@@ -26,7 +28,6 @@ class Member2 {
   });
 }
 
-
 class MemberProfileForm extends StatefulWidget {
   @override
   State<MemberProfileForm> createState() => _MemberProfileFormState();
@@ -35,27 +36,24 @@ class MemberProfileForm extends StatefulWidget {
 class _MemberProfileFormState extends State<MemberProfileForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _memberNameController;
-  // late TextEditingController _projectNameController;
   late TextEditingController _skillsController;
-    late TextEditingController _mailController;
-      late TextEditingController _designationController;
+  late TextEditingController _mailController;
+  late TextEditingController _designationController;
   late List<String> skills = [];
 
-
- String? _validateAlphabets(String? value) {
-  if (value != null && value.isNotEmpty) {
-    // Regular expression to match alphabets and spaces
-    final alphaRegex = RegExp(r'^[a-zA-Z\s]+$');
-    if (!alphaRegex.hasMatch(value)) {
-      return 'Only alphabets and spaces are allowed';
+  String? _validateAlphabets(String? value) {
+    if (value != null && value.isNotEmpty) {
+      final alphaRegex = RegExp(r'^[a-zA-Z\s]+$');
+      if (!alphaRegex.hasMatch(value)) {
+        return 'Only alphabets and spaces are allowed';
+      }
+    } else {
+      return 'This field is required';
     }
-  } else {
-    return 'This field is required';
+    return null;
   }
-  return null;
-}
 
-XFile? _selectedImage;
+  XFile? _selectedImage;
   final _picker = ImagePicker();
   bool _isLoading = false;
 
@@ -77,8 +75,7 @@ XFile? _selectedImage;
   }
 
   Future<void> _pickImage() async {
-    final XFile? pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       setState(() {
         _selectedImage = pickedImage;
@@ -92,7 +89,7 @@ XFile? _selectedImage;
     });
   }
 
-void _resetForm() {
+  void _resetForm() {
     _memberNameController.clear();
     _designationController.clear();
     _skillsController.clear();
@@ -104,34 +101,61 @@ void _resetForm() {
   }
 
   @override
-void initState() {
-  super.initState();
-  _memberNameController = TextEditingController();
-  _skillsController = TextEditingController();
-  _mailController = TextEditingController(); // Initialize _mailController
-  _designationController = TextEditingController();
-}
-
+  void initState() {
+    super.initState();
+    _memberNameController = TextEditingController();
+    _skillsController = TextEditingController();
+    _mailController = TextEditingController();
+    _designationController = TextEditingController();
+  }
 
   @override
   void dispose() {
     _memberNameController.dispose();
-    // _projectNameController.dispose();
     _skillsController.dispose();
     _mailController.dispose();
     _designationController.dispose();
     super.dispose();
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Save member profile to Firestore or perform any other action
-      // Example: FirestoreService().saveMemberProfile(memberProfile);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Member profile saved successfully'),
-        ),
-      );
+      setState(() {
+        _isLoading = true;
+      });
+
+      String? imageUrl;
+      if (_selectedImage != null) {
+        imageUrl = await _uploadImage();
+      }
+
+      final memberProfile = {
+        'member_name': _memberNameController.text,
+        'designation': _designationController.text,
+        'skills': _skillsController.text.split(',').map((skill) => skill.trim()).toList(),
+        'mail': _mailController.text,
+        'dpURL': imageUrl,
+      };
+
+      try {
+        await FirebaseFirestore.instance.collection('members').add(memberProfile);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Member profile saved successfully'),
+          ),
+        );
+        _resetForm();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save profile: $e'),
+          ),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -159,11 +183,10 @@ void initState() {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Form(
-                  key:_formKey,
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                     
                       const SizedBox(height: 16.0),
                       const Text(
                         'Name',
@@ -179,7 +202,6 @@ void initState() {
                           hintText: 'Enter your name',
                           border: OutlineInputBorder(),
                         ),
-                  
                         maxLines: null,
                       ),
                       const SizedBox(height: 16.0),
@@ -193,11 +215,11 @@ void initState() {
                       TextFormField(
                         controller: _mailController,
                         validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'MailId is required';
-                      }
-                      return null;
-                    },
+                          if (value == null || value.isEmpty) {
+                            return 'MailId is required';
+                          }
+                          return null;
+                        },
                         decoration: const InputDecoration(
                           hintText: 'Enter your email',
                           border: OutlineInputBorder(),
@@ -205,7 +227,6 @@ void initState() {
                         maxLines: null,
                       ),
                       const SizedBox(height: 16.0),
-                      
                       const Text(
                         'Designation',
                         style: TextStyle(
@@ -216,11 +237,11 @@ void initState() {
                       TextFormField(
                         controller: _designationController,
                         validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Designation is required';
-                      }
-                      return null;
-                    },
+                          if (value == null || value.isEmpty) {
+                            return 'Designation is required';
+                          }
+                          return null;
+                        },
                         decoration: const InputDecoration(
                           hintText: 'Enter Current Designation',
                           border: OutlineInputBorder(),
@@ -235,18 +256,17 @@ void initState() {
                       ),
                       TextFormField(
                         controller: _skillsController,
-                         validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Skills are required';
-                      }
-                      return null;
-                    },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Skills are required';
+                          }
+                          return null;
+                        },
                         decoration: const InputDecoration(
                           hintText: 'Enter Skills',
                           border: OutlineInputBorder(),
                         ),
                       ),
-                      
                       const SizedBox(height: 16.0),
                       const Text(
                         'Photo',

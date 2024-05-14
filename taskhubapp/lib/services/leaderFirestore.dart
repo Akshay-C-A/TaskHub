@@ -53,11 +53,8 @@ class LeaderFirestore {
   }
 
   Stream<QuerySnapshot> getProjectMembersStream({required String leaderId}) {
-    final projectMembersStream = _leaderTasks
-        .doc('$leaderId')
-        .collection('tasks')
-        .orderBy('timestamp', descending: true)
-        .snapshots();
+    final projectMembersStream =
+        _teamMembers.doc(leaderId).collection('ProjectMembers').snapshots();
     return projectMembersStream;
   }
 }

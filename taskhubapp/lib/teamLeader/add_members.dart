@@ -1,26 +1,25 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:taskhubapp/teamLeader/view_task.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-// class ProjectMembers extends StatefulWidget {
-//   const ProjectMembers({super.key});
+class ProjectMembers extends StatefulWidget {
+  const ProjectMembers({super.key});
 
 //   @override
 //   State<ProjectMembers> createState() => ProjectMembersState();
 // }
 
-// class ProjectMembersState extends State<ProjectMembers> {
-//   final userMail = FirebaseAuth.instance.currentUser!.email; 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: StreamBuilder(
-//           stream: FirebaseFirestore.collection('teamMembers').doc(userMail).collection('ProjectMembers').snapshots(),
-//           builder: (context, snapshot) {
-//             if (snapshot.hasError) {
-//               return Text('Error: ${snapshot.error}');
-//             }
+class ProjectMembersState extends State<ProjectMembers> {
+  final userMail = FirebaseAuth.instance.currentUser!.email; 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder(
+          stream: FirebaseFirestore.collection('teamMembers').doc(userMail).collection('ProjectMembers').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
 
 //             if (snapshot.connectionState == ConnectionState.waiting) {
 //               return Center(child: CircularProgressIndicator());
@@ -38,17 +37,17 @@
 //                 DocumentSnapshot document = eventPostList[index];
 //                 // String docID = document.id;
 
-//                 // Get note from each doc
-//                 Map<String, dynamic> data =
-//                     document.data() as Map<String, dynamic>;
-//                 int priority = data['priority'];
-//                 String taskName = data['taskName'];
-//                 Timestamp timestamp = data['timestamp'];
-//                 String projectName = data['projectName'];
-//                 String taskId = data['taskId'];
-//                 String details = data['details'];
-//                 String leaderName = data['leaderName'];
-//                 String leaderId = data['leaderId'];
+                // Get note from each doc
+                Map<String, dynamic> data =
+                    document.data() as Map<String, dynamic>;
+                int priority = data['priority'];
+                String taskName = data['taskName'];
+                Timestamp timestamp = data['timestamp'];
+                String projectName = data['projectName'];
+                String taskId = data['taskId'];
+                String details = data['details'];
+                String leaderName = data['leaderName'];
+                String leaderId = data['leaderId'];
 
                
 //                 // NotificationService().showNotification(

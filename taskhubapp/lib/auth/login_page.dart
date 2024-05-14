@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
           });
 
           userType = {
-            'userType': 'teamMember',
+            'userType': _userType,
           };
 
           if (userType!['userType'] == 'teamLeader') {

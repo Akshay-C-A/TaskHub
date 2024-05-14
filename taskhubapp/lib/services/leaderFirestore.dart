@@ -8,6 +8,9 @@ class LeaderFirestore {
   CollectionReference _teamMembers =
       FirebaseFirestore.instance.collection('teamMembers');
 
+  CollectionReference _leaderMember =
+      FirebaseFirestore.instance.collection('teamLeaders');
+
   Future<void> addTasks({
     required String projectName,
     required String taskName,
@@ -55,7 +58,7 @@ class LeaderFirestore {
 
   Stream<QuerySnapshot> getProjectMembersStream({required String leaderId}) {
     final projectMembersStream =
-        _teamMembers.doc(leaderId).collection('ProjectMembers').snapshots();
+        _leaderMember.doc(leaderId).collection('ProjectMembers').snapshots();
     return projectMembersStream;
   }
 }

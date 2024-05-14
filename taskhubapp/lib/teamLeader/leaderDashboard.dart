@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskhubapp/chat_app/pages/home_page.dart';
 import 'package:taskhubapp/teamLeader/addTask.dart';
+import 'package:taskhubapp/teamLeader/add_members.dart';
 import 'package:taskhubapp/teamLeader/sample.dart';
 import 'package:taskhubapp/teamLeader/task_posted.dart';
 
@@ -18,24 +19,26 @@ class LleaderDashboardState extends State<LeaderDashboard> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      TaskPosted(leaderId: FirebaseAuth.instance.currentUser!.email.toString(),),
+      TaskPosted(
+        leaderId: FirebaseAuth.instance.currentUser!.email.toString(),
+      ),
       AddTaskPage(
         projectName: '123B65',
         leaderId: FirebaseAuth.instance.currentUser!.email.toString(),
         leaderName: 'Sundar Piche',
       ),
-      
+      ProjectMembers(company: 'Google')
     ];
 
     return Scaffold(
-      
       floatingActionButton: Badge(
         isLabelVisible: true,
         backgroundColor: Colors.red,
         label: Text('1'),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatHomePage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ChatHomePage()));
           },
           child: Icon(Icons.chat),
         ),

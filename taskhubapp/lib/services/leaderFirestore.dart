@@ -4,9 +4,8 @@ import 'package:intl/intl.dart';
 class LeaderFirestore {
   CollectionReference _leaderTasks =
       FirebaseFirestore.instance.collection('tasks');
-
-  CollectionReference _teamMembers =
-      FirebaseFirestore.instance.collection('teamMembers');
+  
+  // CollectionReference _team = FirebaseFirestore.collection('teamMembers').doc(userMail).collection('ProjectMembers');
 
   CollectionReference _leaderMember =
       FirebaseFirestore.instance.collection('teamLeaders');

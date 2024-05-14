@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:taskhubapp/services/leaderFirestore.dart';
 
 class ProjectMembers extends StatefulWidget {
   final String company;
   const ProjectMembers({super.key, required this.company});
 
-  @override
-  State<ProjectMembers> createState() => ProjectMembersState();
-}
+//   @override
+//   State<ProjectMembers> createState() => ProjectMembersState();
+// }
 
 class ProjectMembersState extends State<ProjectMembers> {
   LeaderFirestore _leaderFirestore = LeaderFirestore();
@@ -41,21 +40,21 @@ class ProjectMembersState extends State<ProjectMembers> {
               return Text('Error: ${snapshot.error}');
             }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
+//             if (snapshot.connectionState == ConnectionState.waiting) {
+//               return Center(child: CircularProgressIndicator());
+//             }
 
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return Center(child: Text('No data available'));
-            }
+//             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+//               return Center(child: Text('No data available'));
+//             }
 
-            List eventPostList = snapshot.data!.docs;
-            return ListView.builder(
-              itemCount: eventPostList.length,
-              itemBuilder: (context, index) {
-                // Get each individual doc
-                DocumentSnapshot document = eventPostList[index];
-                // String docID = document.id;
+//             List eventPostList = snapshot.data!.docs;
+//             return ListView.builder(
+//               itemCount: eventPostList.length,
+//               itemBuilder: (context, index) {
+//                 // Get each individual doc
+//                 DocumentSnapshot document = eventPostList[index];
+//                 // String docID = document.id;
 
                 // Get note from each doc
                 Map<String, dynamic> data =
@@ -99,9 +98,9 @@ class MemberSearchPage extends StatefulWidget {
   const MemberSearchPage(
       {super.key, required this.company, required this.email});
 
-  @override
-  State<MemberSearchPage> createState() => _MemberSearchPageState();
-}
+//   @override
+//   State<MemberSearchPage> createState() => _MemberSearchPageState();
+// }
 
 class _MemberSearchPageState extends State<MemberSearchPage> {
   String name = '';
@@ -170,17 +169,17 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
             );
           }
 
-          if (!snapshots.hasData || snapshots.data == null) {
-            return Center(
-              child: Text('No data found'),
-            );
-          }
+//           if (!snapshots.hasData || snapshots.data == null) {
+//             return Center(
+//               child: Text('No data found'),
+//             );
+//           }
 
-          return ListView.builder(
-            itemCount: snapshots.data!.docs.length,
-            itemBuilder: (context, index) {
-              var data =
-                  snapshots.data!.docs[index].data() as Map<String, dynamic>?;
+//           return ListView.builder(
+//             itemCount: snapshots.data!.docs.length,
+//             itemBuilder: (context, index) {
+//               var data =
+//                   snapshots.data!.docs[index].data() as Map<String, dynamic>?;
 
               if (data == null) {
                 return Text('data');
@@ -256,11 +255,11 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                 );
               }
 
-              return Container();
-            },
-          );
-        },
-      ),
-    );
-  }
-}
+//               return Container();
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }

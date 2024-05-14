@@ -106,10 +106,11 @@ class _LoginPageState extends State<LoginPage> {
               .collection('teamLeaders')
               .doc(emailController.text)
               .set({
+            'uid': await FirebaseAuth.instance.currentUser!.uid,
             'email': emailController.text.trim(),
             'name': nameController.text.trim(),
             'designation': designationController.text.trim(),
-            'skills': skillsController.text.trim(),
+            'skills': skillsController.text.trim().split(',').map((skill) => skill.trim()).toList(),
             'companyName': companyNameController.text.trim(), // Add company name to Firestore
           });
         } else {
@@ -117,10 +118,11 @@ class _LoginPageState extends State<LoginPage> {
               .collection('teamMembers')
               .doc(emailController.text)
               .set({
+            'uid': await FirebaseAuth.instance.currentUser!.uid,
             'email': emailController.text.trim(),
             'name': nameController.text.trim(),
             'designation': designationController.text.trim(),
-            'skills': skillsController.text.trim(),
+            'skills': skillsController.text.trim().split(',').map((skill) => skill.trim()).toList(),
             'companyName': companyNameController.text.trim(), // Add company name to Firestore
           });
 

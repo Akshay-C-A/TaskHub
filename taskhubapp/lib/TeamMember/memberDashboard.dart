@@ -81,47 +81,43 @@ class _MemberDashboardState extends State<MemberDashboard> {
     ];
 
     return Scaffold(
-      floatingActionButton: Badge(
-        isLabelVisible: true,
-        backgroundColor: Colors.red,
-        label: Text('1'),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatHomePage()));
-          },
-          child: Icon(Icons.chat),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ChatHomePage()));
+        },
+        child: Icon(Icons.chat),
       ),
       appBar: AppBar(
-                    title: Text('Team Member'),
-                    actions: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileScreen(
-                                    member: Member2(
-                                  member_name: member_name,
-                                  memberId: memberId,
-                                  project_name: project_name,
-                                  team_lead_name: team_lead_name,
-                                  skills: skills,
-                                  mail: mail,
-                                  dpURL: dpURL,
-                                )),
-                              ));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(dpURL),
-                            radius: 20.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+        title: Text('Team Member'),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                        member: Member2(
+                      member_name: member_name,
+                      memberId: memberId,
+                      project_name: project_name,
+                      team_lead_name: team_lead_name,
+                      skills: skills,
+                      mail: mail,
+                      dpURL: dpURL,
+                    )),
+                  ));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(dpURL),
+                radius: 20.0,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: IndexedStack(
         index: _selectedIndex,
         children: widgetOptions,

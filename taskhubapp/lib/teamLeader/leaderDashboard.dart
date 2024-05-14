@@ -31,17 +31,12 @@ class LleaderDashboardState extends State<LeaderDashboard> {
     ];
 
     return Scaffold(
-      floatingActionButton: Badge(
-        isLabelVisible: true,
-        backgroundColor: Colors.red,
-        label: Text('1'),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ChatHomePage()));
-          },
-          child: Icon(Icons.chat),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ChatHomePage()));
+        },
+        child: Icon(Icons.chat),
       ),
       body: IndexedStack(
         index: _selectedIndex,

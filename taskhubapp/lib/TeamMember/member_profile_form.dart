@@ -39,6 +39,7 @@ class _MemberProfileFormState extends State<MemberProfileForm> {
   late TextEditingController _skillsController;
     late TextEditingController _mailController;
       late TextEditingController _designationController;
+  late List<String> skills = [];
 
 
  String? _validateAlphabets(String? value) {

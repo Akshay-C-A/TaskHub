@@ -255,11 +255,11 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                 );
               }
 
-//               return Container();
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+              return Container();
+            },
+          );
+        },
+      ),
+    );
+  }
+}

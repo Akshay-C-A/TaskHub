@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -62,7 +63,7 @@ class _MemberProfileFormState extends State<MemberProfileForm> {
 
     final storageRef = FirebaseStorage.instance.ref();
     final fileName = path.basename(_selectedImage!.path);
-    final imageRef = storageRef.child('student_profile/$fileName');
+    final imageRef = storageRef.child('member_profile/$fileName');
 
     try {
       await imageRef.putFile(File(_selectedImage!.path));
@@ -129,16 +130,22 @@ class _MemberProfileFormState extends State<MemberProfileForm> {
         imageUrl = await _uploadImage();
       }
 
-      final memberProfile = {
-        'member_name': _memberNameController.text,
+      // final memberProfile = {
+      //   'name': _memberNameController.text,
+      //   'designation': _designationController.text,
+      //   'skills': _skillsController.text.split(',').map((skill) => skill.trim()).toList(),
+      //   'mail': _mailController.text,
+      // };
+
+      try {
+        await FirebaseFirestore.instance.collection('teamMembers').doc(FirebaseAuth.instance.currentUser!.email).update({
+          'name': _memberNameController.text,
         'designation': _designationController.text,
         'skills': _skillsController.text.split(',').map((skill) => skill.trim()).toList(),
         'mail': _mailController.text,
         'dpURL': imageUrl,
-      };
+        });
 
-      try {
-        await FirebaseFirestore.instance.collection('members').add(memberProfile);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Member profile saved successfully'),

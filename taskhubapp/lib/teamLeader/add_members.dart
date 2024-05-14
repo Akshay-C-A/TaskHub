@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taskhubapp/services/leaderFirestore.dart';
 
 class ProjectMembers extends StatefulWidget {
   const ProjectMembers({super.key});
@@ -10,12 +11,13 @@ class ProjectMembers extends StatefulWidget {
 }
 
 class ProjectMembersState extends State<ProjectMembers> {
+  LeaderFirestore _leaderFirestore = LeaderFirestore();
   final userMail = FirebaseAuth.instance.currentUser!.email; 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-          stream: FirebaseFirestore.collection('teamMembers').doc(userMail).collection('ProjectMembers').snapshots(),
+          stream: _leaderFirestore.getProjectMembersStream(leaderId: userMail.toString()),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
@@ -40,6 +42,7 @@ class ProjectMembersState extends State<ProjectMembers> {
                 // Get note from each doc
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
+                    
                 int priority = data['priority'];
                 String taskName = data['taskName'];
                 Timestamp timestamp = data['timestamp'];

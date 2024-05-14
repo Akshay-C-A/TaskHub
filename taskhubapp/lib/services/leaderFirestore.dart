@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 class LeaderFirestore {
   CollectionReference _leaderTasks =
       FirebaseFirestore.instance.collection('tasks');
-  
-  CollectionReference _team = FirebaseFirestore.collection('teamMembers').doc(userMail).collection('ProjectMembers');
+
+  CollectionReference _teamMembers =
+      FirebaseFirestore.instance.collection('teamMembers');
 
   Future<void> addTasks({
     required String projectName,
@@ -53,11 +54,8 @@ class LeaderFirestore {
   }
 
   Stream<QuerySnapshot> getProjectMembersStream({required String leaderId}) {
-    final projectMembersStream = _leaderTasks
-        .doc('$leaderId')
-        .collection('tasks')
-        .orderBy('timestamp', descending: true)
-        .snapshots();
+    final projectMembersStream =
+        _teamMembers.doc(leaderId).collection('ProjectMembers').snapshots();
     return projectMembersStream;
   }
 }

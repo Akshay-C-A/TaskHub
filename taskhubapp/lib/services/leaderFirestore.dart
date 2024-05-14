@@ -5,7 +5,7 @@ class LeaderFirestore {
   CollectionReference _leaderTasks =
       FirebaseFirestore.instance.collection('tasks');
   
-  // CollectionReference _team = FirebaseFirestore.collection('teamMembers').doc(userMail).collection('ProjectMembers');
+  CollectionReference _teamMember = FirebaseFirestore.instance.collection('teamMembers');
 
   CollectionReference _leaderMember =
       FirebaseFirestore.instance.collection('teamLeaders');

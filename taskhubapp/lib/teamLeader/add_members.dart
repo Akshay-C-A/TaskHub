@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taskhubapp/services/leaderFirestore.dart';
+import 'package:taskhubapp/teamLeader/view_task.dart';
 
 class ProjectMembers extends StatefulWidget {
   final String company;
   const ProjectMembers({super.key, required this.company});
 
-//   @override
-//   State<ProjectMembers> createState() => ProjectMembersState();
-// }
+  @override
+  State<ProjectMembers> createState() => ProjectMembersState();
+}
 
 class ProjectMembersState extends State<ProjectMembers> {
   LeaderFirestore _leaderFirestore = LeaderFirestore();
@@ -40,49 +42,70 @@ class ProjectMembersState extends State<ProjectMembers> {
               return Text('Error: ${snapshot.error}');
             }
 
-//             if (snapshot.connectionState == ConnectionState.waiting) {
-//               return Center(child: CircularProgressIndicator());
-//             }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-//             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-//               return Center(child: Text('No data available'));
-//             }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No data available'));
+            }
 
-//             List eventPostList = snapshot.data!.docs;
-//             return ListView.builder(
-//               itemCount: eventPostList.length,
-//               itemBuilder: (context, index) {
-//                 // Get each individual doc
-//                 DocumentSnapshot document = eventPostList[index];
-//                 // String docID = document.id;
+            List eventPostList = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: eventPostList.length,
+              itemBuilder: (context, index) {
+                // Get each individual doc
+                DocumentSnapshot document = eventPostList[index];
+                // String docID = document.id;
 
                 // Get note from each doc
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
+                int priority = data['priority'];
+                String taskName = data['taskName'];
+                Timestamp timestamp = data['timestamp'];
+                String projectName = data['projectName'];
+                String taskId = data['taskId'];
+                String details = data['details'];
+                String leaderName = data['leaderName'];
+                String leaderId = data['leaderId'];
 
-                // String company = data['companyName'];
-                String designation = data['designation'];
-                String email = data['email'];
-                String name = data['name'];
-                String uid = data['uid'];
-                // List skills = List<String>.from(data['skills']);
-                // String userType = data['userType'];
-                // NotificationService().showNotification(
-                //   title: 'Added a New Task',
-                //   body: data['taskName'],
-                // );
+//                 // NotificationService().showNotification(
+//                 //   title: 'Added a New Task',
+//                 //   body: data['taskName'],
+//                 // );
 
                 // Display as a list title
                 return Padding(
                   padding: EdgeInsets.all(8),
                   child: ListTile(
                     onTap: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: ((context) => ViewTask(priority: priority, taskName: taskName, timestamp: timestamp, projectName: projectName, taskId: taskId, details: details, leaderName: leaderName, leaderId: leaderId))));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => ViewTask(
+                                  priority: priority,
+                                  taskName: taskName,
+                                  timestamp: timestamp,
+                                  projectName: projectName,
+                                  taskId: taskId,
+                                  details: details,
+                                  leaderName: leaderName,
+                                  leaderId: leaderId))));
                     },
-                    tileColor: Colors.grey[300],
+                    tileColor: Colors.amber,
                     leading: Text((index + 1).toString()),
-                    title: Text(name),
-                    subtitle: Text(designation),
+                    title: Text(taskName),
+                    subtitle: Text(details),
+                    trailing: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.black,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 12,
+                        child: Text(priority.toString()),
+                      ),
+                    ),
                   ),
                 );
               },
@@ -93,14 +116,17 @@ class ProjectMembersState extends State<ProjectMembers> {
 }
 
 class MemberSearchPage extends StatefulWidget {
-  final String company;
   final String email;
-  const MemberSearchPage(
-      {super.key, required this.company, required this.email});
+  final String company;
+  const MemberSearchPage({
+    super.key,
+    required this.email,
+    required this.company,
+  });
 
-//   @override
-//   State<MemberSearchPage> createState() => _MemberSearchPageState();
-// }
+  @override
+  State<MemberSearchPage> createState() => _MemberSearchPageState();
+}
 
 class _MemberSearchPageState extends State<MemberSearchPage> {
   String name = '';
@@ -169,17 +195,17 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
             );
           }
 
-//           if (!snapshots.hasData || snapshots.data == null) {
-//             return Center(
-//               child: Text('No data found'),
-//             );
-//           }
+          if (!snapshots.hasData || snapshots.data == null) {
+            return Center(
+              child: Text('No data found'),
+            );
+          }
 
-//           return ListView.builder(
-//             itemCount: snapshots.data!.docs.length,
-//             itemBuilder: (context, index) {
-//               var data =
-//                   snapshots.data!.docs[index].data() as Map<String, dynamic>?;
+          return ListView.builder(
+            itemCount: snapshots.data!.docs.length,
+            itemBuilder: (context, index) {
+              var data =
+                  snapshots.data!.docs[index].data() as Map<String, dynamic>?;
 
               if (data == null) {
                 return Text('data');
@@ -222,13 +248,8 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                   .startsWith(name.toLowerCase())) {
                 return GestureDetector(
                   onTap: () {
-                    // if (data['studentId'] == null) {
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => ViewAlumniProfile(
-                    //               alumniId: data['alumniId'])));
-                    // }
+                    _showAddDialogue(data['name'], data['designation'],
+                        data['email'], data['skills'], data['uid']);
                   },
                   child: ListTile(
                     title: Text(

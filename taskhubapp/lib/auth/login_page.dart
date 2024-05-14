@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
             'email': emailController.text.trim(),
             'name': nameController.text.trim(),
             'designation': designationController.text.trim(),
-            'skills': skillsController.text.trim(),
+            'skills': skillsController.text.trim().split(',').map((skill) => skill.trim()).toList(),
             'companyName': companyNameController.text.trim(), // Add company name to Firestore
           });
         } else {
@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
             'email': emailController.text.trim(),
             'name': nameController.text.trim(),
             'designation': designationController.text.trim(),
-            'skills': skillsController.text.trim(),
+            'skills': skillsController.text.trim().split(',').map((skill) => skill.trim()).toList(),
             'companyName': companyNameController.text.trim(), // Add company name to Firestore
           });
 
